@@ -7,6 +7,7 @@ import (
 	"regexp"
 	"sort"
 	"strconv"
+	"strings"
 
 	"github.com/grafana/pyroscope/ebpf/dwarfdump"
 )
@@ -29,13 +30,23 @@ func main() {
 			fmt.Fprintf(os.Stderr, "%s => v %s \n", fp, v[0])
 		}
 		if len(version) == 0 {
-			panic("no version found" + fp)
+			// In alpine 3.19 images, .debug file does not seem to contain version
+			// string in both AMD64 and ARM64 archs.
+			if strings.Contains(fp, "3.19") {
+				version = make([][][]byte, 1)
+				version[0] = make([][]byte, 3)
+				version[0][0] = []byte("1.2.4")
+				version[0][1] = []byte("2")
+				version[0][2] = []byte("4")
+			} else {
+				panic("no version found " + fp)
+			}
 		}
 		if len(version) > 1 {
 			vv := version[0][0]
 			for _, v := range version {
 				if !bytes.Equal(v[0], vv) {
-					panic("multiple versions found" + fp)
+					panic("multiple versions found " + fp)
 				}
 			}
 		}

@@ -88,4 +88,32 @@ var glibcOffsets = map[Version]*GlibcOffsets{
 		PthreadKeyDataData:      8,
 		PthreadKeyDataSize:      16,
 	},
+	// 2.39 testdata/glibc-arm64/glibc-2.39/libc.so.6
+	{2, 39, 0}: {
+		PthreadSpecific1stblock: 272,
+		PthreadSize:             1856,
+		PthreadKeyDataData:      8,
+		PthreadKeyDataSize:      16,
+	},
+	// 2.40 testdata/glibc-arm64/glibc-2.40/libc.so.6
+	{2, 40, 0}: {
+		PthreadSpecific1stblock: 272,
+		PthreadSize:             1856,
+		PthreadKeyDataData:      8,
+		PthreadKeyDataSize:      16,
+	},
+	// 2.41 testdata/glibc-arm64/glibc-2.41/libc.so.6
+	{2, 41, 0}: {
+		PthreadSpecific1stblock: 272,
+		PthreadSize:             1824,
+		PthreadKeyDataData:      8,
+		PthreadKeyDataSize:      16,
+	},
+	// 2.42 testdata/glibc-arm64/glibc-2.42/libc.so.6
+	{2, 42, 0}: {
+		PthreadSpecific1stblock: 272,
+		PthreadSize:             1824,
+		PthreadKeyDataData:      8,
+		PthreadKeyDataSize:      16,
+	},
 }

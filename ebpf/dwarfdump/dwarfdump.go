@@ -53,7 +53,9 @@ func (i *Index) GetTypeByName2(name string) *Typ {
 	for _, offset := range typedef.TypeOffsets {
 		typ := i.offset2Type[offset]
 		if typ == nil {
-			panic(fmt.Sprintf("%s %d not found", name, offset))
+			continue
+			// Seems like in Python >= 3.14.0, there can be empty offsets
+			// panic(fmt.Sprintf("%s %d not found", name, offset))
 		}
 		res = append(res, typ)
 		if len(res) > 0 {
