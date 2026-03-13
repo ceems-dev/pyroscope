@@ -148,10 +148,6 @@ func collectProfiles(profiles chan *pushv1.PushRequest) {
 		}
 
 	}
-
-	if err != nil {
-		panic(err)
-	}
 }
 
 func ingest(profiles chan *pushv1.PushRequest) {

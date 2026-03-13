@@ -124,13 +124,12 @@ func (s *session) loadPyPerf(cause *sd.Target) (*python.Perf, error) {
 	if err != nil {
 		return nil, fmt.Errorf("unable to get pid namespace %w", err)
 	}
-	err = spec.RewriteConstants(map[string]interface{}{
-		"global_config": python.PerfGlobalConfigT{
-			BpfLogErr:   boolToU8(s.pythonBPFErrorLogEnabled(cause)),
-			BpfLogDebug: boolToU8(s.pythonBPFDebugLogEnabled(cause)),
-			NsPidIno:    nsIno,
-		},
-	})
+	globalConfig := python.PerfGlobalConfigT{
+		BpfLogErr:   boolToU8(s.pythonBPFErrorLogEnabled(cause)),
+		BpfLogDebug: boolToU8(s.pythonBPFDebugLogEnabled(cause)),
+		NsPidIno:    nsIno,
+	}
+	err = spec.Variables["global_config"].Set(globalConfig)
 	if err != nil {
 		return nil, fmt.Errorf("pyperf rewrite constants %w", err)
 	}

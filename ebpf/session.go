@@ -172,11 +172,11 @@ func (s *session) Start() error {
 		if err != nil {
 			return fmt.Errorf("unable to get pid namespace %w", err)
 		}
-		err = spec.RewriteConstants(map[string]interface{}{
-			"global_config": pyrobpf.ProfileGlobalConfigT{
-				NsPidIno: nsIno,
-			},
-		})
+		
+		globalConfig := pyrobpf.ProfileGlobalConfigT{
+			NsPidIno: nsIno,
+		}
+		err = spec.Variables["global_config"].Set(globalConfig)
 		if err != nil {
 			return fmt.Errorf("pyrobpf rewrite constants %w", err)
 		}
