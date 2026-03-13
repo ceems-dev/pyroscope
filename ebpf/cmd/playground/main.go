@@ -124,11 +124,11 @@ func collectProfiles(profiles chan *pushv1.PushRequest) {
 
 	for _, builder := range builders.Builders {
 		protoLabels := make([]*typesv1.LabelPair, 0, builder.Labels.Len())
-		for _, label := range builder.Labels {
+		builder.Labels.Range(func(l labels.Label) {
 			protoLabels = append(protoLabels, &typesv1.LabelPair{
-				Name: label.Name, Value: label.Value,
+				Name: l.Name, Value: l.Value,
 			})
-		}
+		})
 
 		buf := bytes.NewBuffer(nil)
 		_, err := builder.Write(buf)
@@ -347,7 +347,8 @@ func relabelProcessTargets(targets []sd.DiscoveryTarget, cfg []*RelabelConfig) [
 	var res []sd.DiscoveryTarget
 	for _, target := range targets {
 		lbls := labels.FromMap(target)
-		lbls, keep := relabel.Process(lbls, promConfig...)
+		lb := labels.NewBuilder(lbls)
+		keep := relabel.ProcessBuilder(lb, promConfig...)
 
 		if !keep {
 			continue
