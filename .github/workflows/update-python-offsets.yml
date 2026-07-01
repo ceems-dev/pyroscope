@@ -24,6 +24,20 @@ jobs:
           git submodule update --init --recursive
           sudo apt-get install binfmt-support qemu-user-static
 
+      - name: Set up Docker
+        uses: docker/setup-docker-action@v5
+        with:
+          daemon-config: |
+            {
+              "debug": true,
+              "features": {
+                "containerd-snapshotter": true
+              }
+            }
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v4
+
       - name: Check and build Python libraries
         working-directory: ebpf/testdata
         run: ./build_python.sh -i
