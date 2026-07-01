@@ -18,7 +18,6 @@ import (
 	"syscall"
 
 	"github.com/cilium/ebpf"
-	"github.com/cilium/ebpf/btf"
 	"github.com/cilium/ebpf/link"
 	"github.com/cilium/ebpf/perf"
 	"github.com/go-kit/log"
@@ -172,7 +171,7 @@ func (s *session) Start() error {
 		if err != nil {
 			return fmt.Errorf("unable to get pid namespace %w", err)
 		}
-		
+
 		globalConfig := pyrobpf.ProfileGlobalConfigT{
 			NsPidIno: nsIno,
 		}
@@ -187,8 +186,6 @@ func (s *session) Start() error {
 		s.stopLocked()
 		return fmt.Errorf("load bpf objects: %w", err)
 	}
-
-	btf.FlushKernelSpec() // save some memory
 
 	eventsReader, err := perf.NewReader(s.bpf.ProfileMaps.Events, 4*os.Getpagesize())
 	if err != nil {

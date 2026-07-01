@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"github.com/cilium/ebpf"
-	"github.com/cilium/ebpf/btf"
 	"github.com/go-kit/log/level"
 	"github.com/grafana/pyroscope/ebpf/pyrobpf"
 	"github.com/grafana/pyroscope/ebpf/python"
@@ -107,8 +106,6 @@ func (s *session) getPyPerf(cause *sd.Target) *python.Perf {
 }
 
 func (s *session) loadPyPerf(cause *sd.Target) (*python.Perf, error) {
-	defer btf.FlushKernelSpec() // save some memory
-
 	opts := &ebpf.CollectionOptions{
 		Programs: s.progOptions(),
 		MapReplacements: map[string]*ebpf.Map{
