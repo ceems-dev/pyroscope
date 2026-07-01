@@ -1,0 +1,72 @@
+name: Update Python Offsets
+
+on:
+  schedule:
+    - cron: "5 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  update-python-offsets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
+        with:
+          persist-credentials: 'false'
+          ref: ebpf/python-offsets
+
+      - name: Preflights
+        working-directory: ebpf/testdata
+        run: |
+          git submodule update --init --recursive
+          sudo apt-get install binfmt-support qemu-user-static
+
+      - name: Check and build Python libraries
+        working-directory: ebpf/testdata
+        run: ./build_python.sh -i
+
+      - name: Check and build MUSL libraries
+        working-directory: ebpf/testdata
+        run: ./build_musl.sh
+
+      - name: Check and build glibc libraries
+        working-directory: ebpf/testdata
+        run: ./build_glibc.sh
+
+      - name: Verify Changed files
+        id: verify-changed-files
+        run: |
+          # If there are no changes exit code will be 0 and 1 if there are changes
+          if git diff --exit-code ebpf/testdata > /dev/null; then
+              echo "files_changed=false" >> $GITHUB_OUTPUT
+          else
+              echo "files_changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Update offsets
+        if: steps.verify-changed-files.outputs.files_changed == 'true'
+        working-directory: ebpf/testdata
+        run: |
+          make python/dwarfdump
+          make glibc/dwarfdump
+          make musl/dwarfdump
+
+      - name: Commit changes
+        if: steps.verify-changed-files.outputs.files_changed == 'true'
+        working-directory: ebpf/testdata
+        run: |
+          git config --local user.email "bot@ceems.com"
+          git config --local user.name "CEEMS Bot"
+          git add *
+          git commit -m "chore: Update Python offsets" -s
+
+      - name: Push changes
+        if: steps.verify-changed-files.outputs.files_changed == 'true'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ebpf/python-offsets
+          push_to_submodules: on-demand
