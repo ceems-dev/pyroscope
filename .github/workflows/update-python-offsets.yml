@@ -52,7 +52,7 @@ jobs:
         run: bash -x ./build_glibc.sh -a amd64
 
       - name: Update offsets
-        working-directory: ebpf/testdata
+        working-directory: ebpf
         run: |
           make python/dwarfdump
           make glibc/dwarfdump

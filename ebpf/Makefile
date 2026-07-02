@@ -44,11 +44,11 @@ glibc/dwarfdump:
 	git submodule update --init --recursive
 
 	echo "//go:build amd64 && linux" > python/glibc_offsets_gen_amd64.go
-	go run cmd/glibc_dwarfdump/main.go $(shell find testdata/glibc-x64 -name libc.so.6 ) >> python/glibc_offsets_gen_amd64.go
+	go run cmd/glibc_dwarfdump/main.go $(shell find testdata/glibc-x64 -name libc.so.6 -print0 | sort -z | xargs -0 echo) >> python/glibc_offsets_gen_amd64.go
 	go fmt python/glibc_offsets_gen_amd64.go
 
 	echo "//go:build arm64 && linux" > python/glibc_offsets_gen_arm64.go
-	go run cmd/glibc_dwarfdump/main.go $(shell find testdata/glibc-arm64 -name libc.so.6 ) >> python/glibc_offsets_gen_arm64.go
+	go run cmd/glibc_dwarfdump/main.go $(shell find testdata/glibc-arm64 -name libc.so.6 -print0 | sort -z | xargs -0 echo) >> python/glibc_offsets_gen_arm64.go
 	go fmt python/glibc_offsets_gen_arm64.go
 
 .phony: musl/dwarfdump
@@ -56,11 +56,11 @@ musl/dwarfdump:
 	git submodule update --init --recursive
 
 	echo "//go:build amd64 && linux" > python/musl_offsets_gen_amd64.go
-	go run cmd/musl_dwarfdump/main.go $(shell find testdata/alpine-amd64 -name ld-musl-x86_64.so.1.debug ) >> python/musl_offsets_gen_amd64.go
+	go run cmd/musl_dwarfdump/main.go $(shell find testdata/alpine-amd64 -name ld-musl-x86_64.so.1.debug -print0 | sort -z | xargs -0 echo) >> python/musl_offsets_gen_amd64.go
 	go fmt python/musl_offsets_gen_amd64.go
 
 	echo "//go:build arm64 && linux" > python/musl_offsets_gen_arm64.go
-	go run cmd/musl_dwarfdump/main.go $(shell find testdata/alpine-arm64 -name ld-musl-aarch64.so.1.debug) >> python/musl_offsets_gen_arm64.go
+	go run cmd/musl_dwarfdump/main.go $(shell find testdata/alpine-arm64 -name ld-musl-aarch64.so.1.debug -print0 | sort -z | xargs -0 echo) >> python/musl_offsets_gen_arm64.go
 	go fmt python/musl_offsets_gen_arm64.go
 
 .phony: bpf/gen
