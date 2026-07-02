@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
         with:
           persist-credentials: 'false'
-          ref: ebpf/python-offsets
+          ref: ebpf/python-offsets-test-ci
           submodules: recursive
 
       - name: Set up Docker
@@ -76,5 +76,5 @@ jobs:
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ebpf/python-offsets
+          branch: ebpf/python-offsets-test-ci
           push_to_submodules: on-demand
