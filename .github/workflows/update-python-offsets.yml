@@ -18,7 +18,7 @@ jobs:
           limit-access-to-actor: true
           detached: true
 
-      - uses: actions/checkout@7
+      - uses: actions/checkout@v7
         with:
           persist-credentials: 'false'
           ref: ebpf/python-offsets-test-ci
