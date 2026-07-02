@@ -36,7 +36,6 @@ jobs:
           make python/dwarfdump
           make glibc/dwarfdump
           make musl/dwarfdump
-          sleep 300000
 
       - name: Verify Changed files
         id: verify-changed-files
