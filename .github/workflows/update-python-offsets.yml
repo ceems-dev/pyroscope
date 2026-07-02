@@ -25,10 +25,8 @@ jobs:
           submodules: recursive
 
       - name: Update ebpf/testdata submodule
-        run: |
-          git config --local user.email "bot@ceems.com"
-          git config --local user.name "CEEMS Bot"
-          git submodule update  --init --recursive --remote
+        working-directory: ebpf/testdata
+        run: git pull
 
       - name: Update offsets
         working-directory: ebpf
@@ -51,8 +49,11 @@ jobs:
       - name: Commit changes
         if: steps.verify-changed-files.outputs.files_changed == 'true'
         run: |
-          git add ebpf/python/glibc*.go ebpf/python/musl*.go ebpf/python/python*.go
+          git config --local user.email "bot@ceems.com"
+          git config --local user.name "CEEMS Bot"
+          git add -A
           git commit -m "chore: Update Python/MUSL/GLIBC dwarfdumps" -s
+          git status
 
       - name: Push changes
         if: steps.verify-changed-files.outputs.files_changed == 'true'
