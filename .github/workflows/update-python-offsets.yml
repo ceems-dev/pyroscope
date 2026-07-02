@@ -13,6 +13,12 @@ jobs:
   update-python-offsets:
     runs-on: ubuntu-latest
     steps:
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        with:
+          limit-access-to-actor: true
+          detached: true
+
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
         with:
           persist-credentials: 'false'
@@ -43,7 +49,7 @@ jobs:
 
       - name: Check and build glibc libraries
         working-directory: ebpf/testdata
-        run: ./build_glibc.sh -a amd64
+        run: bash -x ./build_glibc.sh -a amd64
 
       - name: Update offsets
         working-directory: ebpf/testdata
