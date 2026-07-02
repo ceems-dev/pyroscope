@@ -116,4 +116,11 @@ var glibcOffsets = map[Version]*GlibcOffsets{
 		PthreadKeyDataData:      8,
 		PthreadKeyDataSize:      16,
 	},
+	// 2.43 testdata/glibc-x64/glibc-2.43/libc.so.6
+	{2, 43, 0}: {
+		PthreadSpecific1stblock: 784,
+		PthreadSize:             2368,
+		PthreadKeyDataData:      8,
+		PthreadKeyDataSize:      16,
+	},
 }
