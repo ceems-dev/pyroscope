@@ -24,10 +24,6 @@ jobs:
           ref: ebpf/python-offsets-test-ci
           submodules: recursive
 
-      - name: Update ebpf/testdata submodule
-        working-directory: ebpf/testdata
-        run: git pull
-
       - name: Update offsets
         working-directory: ebpf
         run: |
@@ -35,10 +31,15 @@ jobs:
           make glibc/dwarfdump
           make musl/dwarfdump
 
+      - name: Update ebpf/testdata submodule
+        working-directory: ebpf/testdata
+        run: git pull
+
       - name: Verify Changed files
         id: verify-changed-files
         run: |
           git status
+          git diff
           # If there are no changes exit code will be 0 and 1 if there are changes
           if git diff --exit-code ebpf/python/glibc*.go ebpf/python/musl*.go ebpf/python/python*.go > /dev/null; then
               echo "files_changed=false" >> $GITHUB_OUTPUT
