@@ -17,12 +17,21 @@ jobs:
         with:
           persist-credentials: 'false'
           ref: ebpf/python-offsets
+          submodules: recursive
 
-      - name: Preflights
-        working-directory: ebpf/testdata
-        run: |
-          git submodule update --init --recursive
-          sudo apt-get install binfmt-support qemu-user-static
+      - name: Set up Docker
+        uses: docker/setup-docker-action@v5
+        with:
+          daemon-config: |
+            {
+              "debug": true,
+              "features": {
+                "containerd-snapshotter": true
+              }
+            }
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v4
 
       - name: Check and build Python libraries
         working-directory: ebpf/testdata
@@ -34,33 +43,32 @@ jobs:
 
       - name: Check and build glibc libraries
         working-directory: ebpf/testdata
-        run: ./build_glibc.sh
-
-      - name: Verify Changed files
-        id: verify-changed-files
-        run: |
-          # If there are no changes exit code will be 0 and 1 if there are changes
-          if git diff --exit-code ebpf/testdata > /dev/null; then
-              echo "files_changed=false" >> $GITHUB_OUTPUT
-          else
-              echo "files_changed=true" >> $GITHUB_OUTPUT
-          fi
+        run: ./build_glibc.sh -a amd64
 
       - name: Update offsets
-        if: steps.verify-changed-files.outputs.files_changed == 'true'
         working-directory: ebpf/testdata
         run: |
           make python/dwarfdump
           make glibc/dwarfdump
           make musl/dwarfdump
 
+      - name: Verify Changed files
+        id: verify-changed-files
+        run: |
+          git status
+          # If there are no changes exit code will be 0 and 1 if there are changes
+          if git diff --exit-code ebpf/python/glibc*.go ebpf/python/musl*.go ebpf/python/python*.go > /dev/null; then
+              echo "files_changed=false" >> $GITHUB_OUTPUT
+          else
+              echo "files_changed=true" >> $GITHUB_OUTPUT
+          fi
+
       - name: Commit changes
         if: steps.verify-changed-files.outputs.files_changed == 'true'
-        working-directory: ebpf/testdata
         run: |
           git config --local user.email "bot@ceems.com"
           git config --local user.name "CEEMS Bot"
-          git add *
+          git add ebpf/python/glibc*.go ebpf/python/musl*.go ebpf/python/python*.go ebpf/testdata/*
           git commit -m "chore: Update Python offsets" -s
 
       - name: Push changes
@@ -70,4 +78,3 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ebpf/python-offsets
           push_to_submodules: on-demand
-
