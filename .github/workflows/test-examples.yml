@@ -1,7 +1,7 @@
 name: Test Examples
 on:
-  schedule:
-    - cron: '13 1 * * *'
+  # schedule:
+  #   - cron: '13 1 * * *'
   workflow_dispatch:
 concurrency:
   # Cancel any running workflow for the same branch when new commits are pushed.
