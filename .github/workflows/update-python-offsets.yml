@@ -33,7 +33,9 @@ jobs:
 
       - name: Update ebpf/testdata submodule
         working-directory: ebpf/testdata
-        run: git pull
+        run: |
+          git config pull.rebase true
+          git pull
 
       - name: Verify Changed files
         id: verify-changed-files
