@@ -69,7 +69,6 @@ var muslOffsets = map[Version]*MuslOffsets{
 		PthreadTsd:  128,
 		PthreadSize: 200,
 	},
-	// 1.2 testdata/alpine-amd64/3.22/usr/lib/debug/lib/ld-musl-x86_64.so.1.debug
 	{1, 2, 5}: {
 		PthreadTsd:  128,
 		PthreadSize: 200,
