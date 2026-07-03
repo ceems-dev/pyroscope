@@ -26,7 +26,7 @@ endif # $(shell uname -s),Linux
 
 .phony: python/dwarfdump
 python/dwarfdump:
-	git submodule update --init --recursive
+	git submodule update --init --recursive --remote --checkout
 
 	echo "//go:build amd64 && linux" > python/python_offsets_gen_amd64.go
 	go run cmd/python_dwarfdump/main.go $(shell find testdata/python-x64 -name libpy\*.so\* | grep -v pyston) \
@@ -41,7 +41,7 @@ python/dwarfdump:
 
 .phony: glibc/dwarfdump
 glibc/dwarfdump:
-	git submodule update --init --recursive
+	git submodule update --init --recursive --remote --checkout
 
 	echo "//go:build amd64 && linux" > python/glibc_offsets_gen_amd64.go
 	go run cmd/glibc_dwarfdump/main.go $(shell find testdata/glibc-x64 -name libc.so.6 ) >> python/glibc_offsets_gen_amd64.go
@@ -53,7 +53,7 @@ glibc/dwarfdump:
 
 .phony: musl/dwarfdump
 musl/dwarfdump:
-	git submodule update --init --recursive
+	git submodule update --init --recursive --remote --checkout
 
 	echo "//go:build amd64 && linux" > python/musl_offsets_gen_amd64.go
 	go run cmd/musl_dwarfdump/main.go $(shell find testdata/alpine-amd64 -name ld-musl-x86_64.so.1.debug ) >> python/musl_offsets_gen_amd64.go
@@ -93,7 +93,7 @@ go/test/arm64: ebpf.arm64.test
 
 .phony: rideshare/gen
 rideshare/gen:
-	git submodule update --init --recursive
+	git submodule update --init --recursive --remote --checkout
 	docker buildx build --platform=linux/amd64,linux/arm64 --push -t $(RIDESHARE_REPO)/ebpf-testdata-rideshare:3.8-slim        --build-arg="PYTHON_VERSION=3.8-slim"       $(RIDESHARE)
 	docker buildx build --platform=linux/amd64,linux/arm64 --push -t $(RIDESHARE_REPO)/ebpf-testdata-rideshare:3.9-slim        --build-arg="PYTHON_VERSION=3.9-slim"       $(RIDESHARE)
 	docker buildx build --platform=linux/amd64,linux/arm64 --push -t $(RIDESHARE_REPO)/ebpf-testdata-rideshare:3.10-slim       --build-arg="PYTHON_VERSION=3.10-slim"      $(RIDESHARE)
