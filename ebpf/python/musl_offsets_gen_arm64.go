@@ -19,12 +19,12 @@ var muslOffsets = map[Version]*MuslOffsets{
 		PthreadTsd:  136,
 		PthreadSize: 224,
 	},
-	// 1.1 testdata/alpine-arm64/3.12/usr/lib/debug/lib/ld-musl-aarch64.so.1.debug
+	// 1.1 testdata/alpine-arm64/3.11/usr/lib/debug/lib/ld-musl-aarch64.so.1.debug
 	{1, 1, 24}: {
 		PthreadTsd:  136,
 		PthreadSize: 224,
 	},
-	// 1.1 testdata/alpine-arm64/3.11/usr/lib/debug/lib/ld-musl-aarch64.so.1.debug
+	// 1.1 testdata/alpine-arm64/3.12/usr/lib/debug/lib/ld-musl-aarch64.so.1.debug
 	{1, 1, 24}: {
 		PthreadTsd:  136,
 		PthreadSize: 224,
@@ -54,18 +54,13 @@ var muslOffsets = map[Version]*MuslOffsets{
 		PthreadTsd:  112,
 		PthreadSize: 200,
 	},
-	// 1.2 testdata/alpine-arm64/3.18/usr/lib/debug/lib/ld-musl-aarch64.so.1.debug
-	{1, 2, 4}: {
-		PthreadTsd:  112,
-		PthreadSize: 200,
-	},
 	// 1.2 testdata/alpine-arm64/3.19/usr/lib/debug/lib/ld-musl-aarch64.so.1.debug
 	{1, 2, 4}: {
 		PthreadTsd:  112,
 		PthreadSize: 200,
 	},
-	// 1.2 testdata/alpine-arm64/3.23/usr/lib/debug/lib/ld-musl-aarch64.so.1.debug
-	{1, 2, 5}: {
+	// 1.2 testdata/alpine-arm64/3.18/usr/lib/debug/lib/ld-musl-aarch64.so.1.debug
+	{1, 2, 4}: {
 		PthreadTsd:  112,
 		PthreadSize: 200,
 	},
@@ -75,6 +70,11 @@ var muslOffsets = map[Version]*MuslOffsets{
 		PthreadSize: 200,
 	},
 	// 1.2 testdata/alpine-arm64/3.22/usr/lib/debug/lib/ld-musl-aarch64.so.1.debug
+	{1, 2, 5}: {
+		PthreadTsd:  112,
+		PthreadSize: 200,
+	},
+	// 1.2 testdata/alpine-arm64/3.23/usr/lib/debug/lib/ld-musl-aarch64.so.1.debug
 	{1, 2, 5}: {
 		PthreadTsd:  112,
 		PthreadSize: 200,
